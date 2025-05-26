@@ -1,0 +1,13 @@
+const express = require('express');
+const router = express.Router();
+const streamController = require('../controllers/streamController');
+
+router.post('/start-stream', streamController.startStream);
+router.post('/stop-stream', streamController.stopStream);
+router.get('/health', streamController.getHealth);
+router.get('/queue-status', streamController.getQueueStatus);
+router.get('/test-ml-model', streamController.testMlModel);
+router.post('/clear-queue', streamController.clearQueue);
+router.get('/system-status', streamController.getSystemStatus);
+
+module.exports = router;
