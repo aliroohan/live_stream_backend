@@ -3,9 +3,9 @@ const http = require('http');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const config = require('./config/config');
-const websocketService = require('./websocket/websocketService');
-const videoProcessingService = require('./services/videoProcessingService');
-const streamRoutes = require('./routes/streamRoutes');
+// const websocketService = require('./websocket/websocketService');
+// const videoProcessingService = require('./services/videoProcessingService');
+// const streamRoutes = require('./routes/streamRoutes');
 const dbConfig = require('./config/dbConfig');
 const userRoutes = require('./routes/userRoutes');
 
