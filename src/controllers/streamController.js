@@ -1,6 +1,7 @@
 const videoProcessingService = require('../services/videoProcessingService');
 const websocketService = require('../websocket/websocketService');
 const fs = require('fs');
+const path = require('path');
 const config = require('../config/config');
 const axios = require('axios');
 
@@ -11,13 +12,23 @@ class StreamController {
             return res.status(400).json({ error: 'cctvUrl is required' });
         }
 
+        // Always set the CCTV URL for automatic stream management
         videoProcessingService.currentCctvUrl = cctvUrl;
         
         if (websocketService.getClientCount() > 0) {
             videoProcessingService.startStreamLoop(cctvUrl);
-            res.status(200).json({ message: 'Stream processing loop started/restarted. Frames will be sent via WebSocket.' });
+            res.status(200).json({ 
+                message: 'Stream processing loop started immediately. Frames will be sent via WebSocket.',
+                clientsConnected: websocketService.getClientCount(),
+                autoStreamEnabled: true
+            });
         } else {
-            res.status(200).json({ message: 'CCTV URL received. Stream will start when a client connects.' });
+            res.status(200).json({ 
+                message: 'CCTV URL configured. Stream will automatically start when a client connects.',
+                clientsConnected: 0,
+                autoStreamEnabled: true,
+                cctvUrl: cctvUrl
+            });
         }
     }
 
@@ -35,8 +46,11 @@ class StreamController {
             isProcessingQueue: videoProcessingService.isProcessingQueue,
             queueLength: videoProcessingService.chunkQueue.length,
             hasClients: websocketService.getClientCount() > 0,
+            clientCount: websocketService.getClientCount(),
             currentUrl: videoProcessingService.currentCctvUrl,
-            isStreamRunning: !!videoProcessingService.streamLoopInterval
+            isStreamRunning: !!videoProcessingService.streamLoopInterval,
+            autoStreamEnabled: true,
+            streamStatus: websocketService.getClientCount() > 0 ? 'running' : 'waiting_for_clients'
         });
     }
 

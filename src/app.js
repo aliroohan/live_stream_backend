@@ -32,6 +32,9 @@ const server = http.createServer(app);
 // Initialize WebSocket
 websocketService.initialize(server);
 
+// Set up the video processing service reference for automatic stream management
+websocketService.setVideoProcessingService(videoProcessingService);
+
 // Setup graceful shutdown
 function gracefulShutdown() {
     console.log('Initiating graceful shutdown...');
