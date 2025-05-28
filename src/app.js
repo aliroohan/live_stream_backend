@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-// const server = http.createServer(app);
+const server = http.createServer(app);
 
 // // Initialize WebSocket
 // websocketService.initialize(server);
