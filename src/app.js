@@ -20,48 +20,43 @@ app.use(express.json());
 dbConfig.run();
 
 // Routes
-app.use('/api/stream', streamRoutes);
+// app.use('/api/stream', streamRoutes);
 app.use('/api/user', userRoutes);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 
-// Initialize WebSocket
-websocketService.initialize(server);
+// // Initialize WebSocket
+// websocketService.initialize(server);
 
-// Set up the video processing service reference for automatic stream management
-websocketService.setVideoProcessingService(videoProcessingService);
+// // Set up the video processing service reference for automatic stream management
+// websocketService.setVideoProcessingService(videoProcessingService);
 
-// Setup graceful shutdown
-function gracefulShutdown() {
-    console.log('Initiating graceful shutdown...');
-    videoProcessingService.stopStreamLoop();
-    videoProcessingService.cleanup();
-    websocketService.close();
+// // Setup graceful shutdown
+// function gracefulShutdown() {
+//     console.log('Initiating graceful shutdown...');
+//     videoProcessingService.stopStreamLoop();
+//     videoProcessingService.cleanup();
+//     websocketService.close();
     
-    server.close(() => {
-        console.log('Server shut down gracefully.');
-        process.exit(0);
-    });
+//     server.close(() => {
+//         console.log('Server shut down gracefully.');
+//         process.exit(0);
+//     });
 
-    setTimeout(() => {
-        console.error('Graceful shutdown timed out. Forcing exit.');
-        process.exit(1);
-    }, 30000);
-}
+//     setTimeout(() => {
+//         console.error('Graceful shutdown timed out. Forcing exit.');
+//         process.exit(1);
+//     }, 30000);
+// }
 
-process.on('SIGINT', gracefulShutdown);
-process.on('SIGTERM', gracefulShutdown);
+// process.on('SIGINT', gracefulShutdown);
+// process.on('SIGTERM', gracefulShutdown);
 
 server.listen(config.PORT, () => {
     console.log(`Backend server listening on http://localhost:${config.PORT}`);
-    console.log(`WebSocket server ready on ws://localhost:${config.PORT}`);
-    console.log(`Expecting ML Model API for chunks at: ${config.ML_MODEL_API_URL_CHUNK}`);
-    console.log(`Temporary video chunks will be stored in: ${config.TEMP_CHUNK_DIR}`);
-    console.log(`Output images will be extracted at ${config.OUTPUT_FRAME_RATE} FPS from processed video.`);
-    console.log('Queue system enabled - no chunks will be skipped!');
 });
 
